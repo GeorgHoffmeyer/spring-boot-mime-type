@@ -38,4 +38,30 @@ internal class RouterTest {
             .expectStatus().isOk
             .expectBody().json("{ \"id\": \"1\", \"lastname\": \"Doe\", \"firstName\": \"John\"}")
     }
+
+    @Test
+    fun `testfixed TestDtoV1 route with correct content type and accept header`() {
+        val client = WebTestClient.bindToRouterFunction(Router().routes()).build()
+
+        client.post().uri("/testfixed")
+            .contentType(MediaType("application", "x.example+json", mapOf("version" to "1")))
+            .accept(MediaType("application", "x.example+json", mapOf("version" to "1")))
+            .bodyValue(TestDtoV1("1", "John"))
+            .exchange()
+            .expectStatus().isOk
+            .expectBody().json("{ \"id\": \"1\", \"name\": \"John\"}")
+    }
+
+    @Test
+    fun `testfixed TestDtoV2 route with correct content type and accept header`() {
+        val client = WebTestClient.bindToRouterFunction(Router().routes()).build()
+
+        client.post().uri("/testfixed")
+            .contentType(MediaType("application", "x.example+json", mapOf("version" to "2")))
+            .accept(MediaType("application", "x.example+json", mapOf("version" to "2")))
+            .bodyValue(TestDtoV2("1", "Doe", "John"))
+            .exchange()
+            .expectStatus().isOk
+            .expectBody().json("{ \"id\": \"1\", \"lastname\": \"Doe\", \"firstName\": \"John\"}")
+    }
 }

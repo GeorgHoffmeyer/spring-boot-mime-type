@@ -31,6 +31,28 @@ class Router {
                 ),
             this::handleV2
         )
+    ).and(
+        RouterFunctions.route(
+            RequestPredicates.POST("/testfixed")
+                .and(
+                    Predicates.accept(FixedMediaType("application", "x.example+json", mapOf("version" to "1")))
+
+                ).and(
+                    RequestPredicates.contentType(MediaType("application","x.example+json",mapOf("version" to "1")))
+                ),
+            this::handleV1
+        )
+    ).and(
+        RouterFunctions.route(
+            RequestPredicates.POST("/testfixed")
+                .and(
+                    Predicates.accept(FixedMediaType("application", "x.example+json", mapOf("version" to "2")))
+
+                ).and(
+                    RequestPredicates.contentType(MediaType("application","x.example+json",mapOf("version" to "2")))
+                ),
+            this::handleV2
+        )
     )
 
     fun handleV1(request: ServerRequest): Mono<ServerResponse> {
